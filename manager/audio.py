@@ -23,7 +23,6 @@ def get_recognizer():
     return sr.Recognizer()
 
 
-
 def record_audio(file_path, timeout=10, phrase_time_limit=None, retries=3, energy_threshold=2000, 
                  pause_threshold=1, phrase_threshold=0.1, dynamic_energy_threshold=True, 
                  calibration_duration=1):
