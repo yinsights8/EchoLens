@@ -1,29 +1,32 @@
-from manager.audio import record_audio, play_audio
-from manager.fasterW import transcribe_audio
 from utils import config
+from manager.recorder import start_spacebar_recording
+from utils.audio_converter import convert_mp3_to_wav, save_results_to_json
+from manager.diarization import speaker_diarization
+from manager.fasterW import initialize_whisper_model, process_segments
+from pydub import AudioSegment
 import os
-import json
+
+import warnings
+warnings.filterwarnings("ignore")
 
 
-# Initialize a container for all transcriptions
-full_transcription = {}
+start_spacebar_recording()
 
-try:
-    while True:
-        file_path = config.AUDIO_FILE_PATH
+wav_file = convert_mp3_to_wav(mp3_path=config.AUDIO_MP3_FILE_PATH, wav_path=config.AUDIO_WAV_FILE_PATH)
 
-        # Record and transcribe audio
-        record_audio(file_path)
-        transcription = transcribe_audio(file_path)
+# diarize the audio file
+diarization = speaker_diarization(wav_file=wav_file)
 
-        # Update the full transcription dictionary
-        full_transcription.update(transcription)
+# Initialize Whisper model
+whisper = initialize_whisper_model()
 
-        # Optional: Print current segment
-        print(transcription)
+# Load full audio for segment processing
+full_audio = AudioSegment.from_wav(wav_file)
+    
+    
+# Process segments and transcribe
+results = process_segments(diarization, whisper, full_audio)
 
-except KeyboardInterrupt:
-    # Save all accumulated transcriptions to JSON
-    with open("transcription.json", "w", encoding="utf-8") as f:
-        json.dump(full_transcription, f, ensure_ascii=False, indent=4)
-    print("\nTranscription saved to 'transcription.json'.")
+# save results to JSON file
+save_results_to_json(results)      
+                                                                                                                                                                         

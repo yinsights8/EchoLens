@@ -1,6 +1,7 @@
 # Step 1: Import necessary libraries
 from pydub import AudioSegment
 import json
+from utils import config
 import os
 
 
@@ -15,8 +16,11 @@ def convert_mp3_to_wav(mp3_path, wav_path):
 
 
 # Step 6: Save final output to JSON
-def save_results_to_json(results, output_json_path):
+def save_results_to_json(results):
     """Save transcription results to a JSON file."""
-    with open(output_json_path, "w", encoding="utf-8") as f:
+    os.makedirs('transcripts', exist_ok=True)
+    
+    transcript_path =f"transcripts/{config.output}.json"
+    with open(transcript_path, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=4, ensure_ascii=False)
-    print(f"\n✅ Speaker-attributed transcription saved to: {output_json_path}")
+    print(f"\n✅ Speaker-attributed transcription saved to: {transcript_path}")
