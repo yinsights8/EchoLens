@@ -8,7 +8,7 @@ from utils import config
 import os
 
 # Step 4: Initialize Whisper model
-def initialize_whisper_model():
+def initialize_whisper_model(model_size):
     """Initialize Whisper model with the appropriate compute type."""
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -23,7 +23,7 @@ def initialize_whisper_model():
         compute_type = "int8"  # Fallback to int8 on CPU or unsupported GPUs
 
     # Load the model with selected device and compute_type
-    model_size = "small.en"  # Change to "large-v1" for larger models
+    
     whisper = WhisperModel(model_size, device=device, compute_type=compute_type)
     return whisper
 

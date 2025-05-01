@@ -2,6 +2,8 @@ import os
 import time
 
 
+MODEL_NAME = "medium"  # Options: tiny, base, small, medium, large
+
 os.makedirs("audio", exist_ok=True)
 output = time.strftime("%Y-%m-%d_%H-%M-%S")
 
